@@ -157,9 +157,8 @@ class EditorMultiCursor:
         pos = self.cursores.get(id_cursor, 0)
         print(f"Escribiendo '{texto}' en posicion {pos}")
 
-# ============================================================================
+
 # EJERCICIOS DE ANÁLISIS Y OPTIMIZACIÓN
-# ============================================================================
 
 #EJERCICIO 19: Benchmark de operaciones:
 import time
@@ -180,6 +179,37 @@ def realizar_benchmark():
     
     print(f"Benchmark (Insertar {n} al inicio):")
     print(f"Lista Python: {fin_py:.5f}s | Mi Lista: {fin_mia:.5f}s")
+
+#EJERCICIO 20: Análisis de casos de uso
+
+#1. Sistema de colas de impresión (FIFO estricto)
+    #Lista Simple, Al ser un sistema FIFO, solo necesitamos insertar al final y eliminar al inicio,
+    #la lista simple hace ambas operaciones en tiempo constante O(1).
+#2. Historial de navegación de un navegador
+    #Lista Doble, el usuario necesita retroceder y avanzar. 
+    #La lista doble permite navegar en ambas direcciones eficientemente gracias a los punteros.
+#3. Sistema de undo/redo con límite de 100 acciones
+    #Lista Doble, porque requiere movimiento bidireccional.
+#4. Base de datos que necesita acceso rápido por ID
+    #Array,Si el ID es numérico, el Array ofrece acceso aleatorio O(1). Las listas enlazadas requerirían recorrer nodo por 
+    #nodo O(n), lo cual es muy lento para búsquedas frecuen
+#5. Playlist de música con navegación adelante/atrás
+    # Lista Doble Permite pasar a la siguiente canción o volver a la anterior de forma inmediata.
+#6. Sistema de gestión de memoria del OS
+    #Lista Doble, Tener punteros al bloque anterior y siguiente permite 
+    #realizar las uniones de bloques de una manera mas rápida
+#7. Editor de texto que solo permite append al final
+    #Lista Simple, si no hay ediciones intermedias ni navegación hacia atrás, 
+    #la lista simple funcionara mejor para ir agregando nodos al final.
+#8. Implementación de una pila (Stack)
+    #Lista Simple, esto debido a quetodas las operaciones ocurren en un solo extremo
+#9. Juego que necesita insertar/eliminar enemigos frecuentemente
+    #Lista Doble, Los enemigos pueden morir o aparecer en cualquier momento. 
+    #Si tenemos la referencia del enemigo, la lista doble permite eliminarlo 
+    #en O(1) sin tener que buscar el nodo anterior manualmente.
+#10. Sistema de logs que solo escribe al final y lee todo
+    #Array, porque los logs suelen leerse de forma secuencial y masiva, 
+    #por lo que el array va a aprovechar mejor donde esten localizados.
 
 # SECCIÓN DE PRUEBAS
 def ejecutar_pruebas():
@@ -218,4 +248,5 @@ def ejecutar_pruebas():
     print(f"2. Atrás 10 pasos (límite): {nav.atras(10)} (Esperado: uleam.edu.ec)")
 
 if __name__ == "__main__":
+
     ejecutar_pruebas()
