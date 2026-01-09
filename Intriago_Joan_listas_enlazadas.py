@@ -66,6 +66,14 @@ class ListaEnlazada:
             actual = actual.siguiente
             pos += 1
         return -1
+    #EJERCICIO 4: Lista a array
+    def to_list(self):
+        return self.a_lista_python()
+    
+    #EJERCICIO 5: Limpiar lista
+    def clear(self):
+        self.cabeza = None
+
 
     # --- EJERCICIOS INTERMEDIOS ---
 
@@ -79,6 +87,27 @@ class ListaEnlazada:
             anterior = actual
             actual = siguiente
         self.cabeza = anterior
+    
+    #EJERCICIO 7: Detectar ciclo
+    def tiene_ciclo(self):
+        lento = self.cabeza
+        rapido = self.cabeza
+        while rapido and rapido.siguiente:
+            lento = lento.siguiente
+            rapido = rapido.siguiente.siguiente
+            if lento == rapido:
+                return True
+        return False
+
+    #EJERCICIO 8: Encontrar el medio
+    def obtener_medio(self):
+        lento = self.cabeza
+        rapido = self.cabeza
+        while rapido and rapido.siguiente:
+            lento = lento.siguiente
+            rapido = rapido.siguiente.siguiente
+        return lento.dato if lento else None
+
 
     # Ejercicio 9: Eliminar duplicados
     def eliminar_duplicados(self):
@@ -92,7 +121,26 @@ class ListaEnlazada:
                 vistos.add(actual.siguiente.dato)
                 actual = actual.siguiente
 
+    #EJERCICIO 10: Fusionar dos listas ordenadas
+    def fusionar(l1, l2):
+        nueva = ListaEnlazada()
+        p1, p2 = l1.cabeza, l2.cabeza
+        while p1 and p2:
+            if p1.dato <= p2.dato:
+                nueva.agregar(p1.dato); p1 = p1.siguiente
+            else:
+                nueva.agregar(p2.dato); p2 = p2.siguiente
+        while p1: nueva.agregar(p1.dato); p1 = p1.siguiente
+        while p2: nueva.agregar(p2.dato); p2 = p2.siguiente
+        return nueva
+
+
     # --- EJERCICIOS AVANZADOS ---
+    #EJERCICIO 11: Palíndromo
+    def es_palindromo(self):
+        lista = self.a_lista_python()
+        return lista == lista[::-1]
+
 
     # Ejercicio 12: Rotar lista
     def rotar(self, n):
@@ -111,6 +159,52 @@ class ListaEnlazada:
             nuevo_final = nuevo_final.siguiente
         self.cabeza = nuevo_final.siguiente
         nuevo_final.siguiente = None
+    
+    #EJERCICIO 13: Particionar lista
+    def particionar(self, x):
+        menores, mayores = ListaEnlazada(), ListaEnlazada()
+        actual = self.cabeza
+        while actual:
+            if actual.dato < x:
+                menores.agregar(actual.dato)
+            else:
+                mayores.agregar(actual.dato)
+            actual = actual.siguiente
+        if not menores.cabeza:
+            self.cabeza = mayores.cabeza
+        else:
+            fin = menores.cabeza
+            while fin.siguiente:
+                fin = fin.siguiente
+            fin.siguiente = mayores.cabeza
+            self.cabeza = menores.cabeza
+
+    #EJERCICIO 14: Suma de dos listas (números)
+    def sumar_listas(l1, l2):
+        r = ListaEnlazada()
+        p1, p2, carry = l1.cabeza, l2.cabeza, 0
+        while p1 or p2 or carry:
+            s = (p1.dato if p1 else 0) + (p2.dato if p2 else 0) + carry
+            r.agregar(s % 10)
+            carry = s // 10
+            if p1: p1 = p1.siguiente
+            if p2: p2 = p2.siguiente
+        return r
+
+    #EJERCICIO 15: Intersección de dos listas
+    def interseccion(l1, l2):
+        vistos = set()
+        a = l1.cabeza
+        while a:
+            vistos.add(a)
+            a = a.siguiente
+        b = l2.cabeza
+        while b:
+            if b in vistos:
+                return b.dato
+            b = b.siguiente
+        return None
+
 
 # --- EJERCICIO 16: Navegador Web (Clase aparte por ser Lista Doble) ---
 class HistorialNavegador:
@@ -222,15 +316,48 @@ def ejecutar_pruebas():
     print(f"2. Obtener dato en índice 3: {l_basica.obtener(3)} (Esperado: 30)")
     print(f"3. Buscar índice del 50: {l_basica.indice_de(50)} (Esperado: -1)")
 
+    #PRUEBA EJERCICIO 4
+    print("\n[PRUEBA EJERCICIO 4]")
+    l = ListaEnlazada()
+    for x in [1,2,3]: l.agregar(x)
+    print(l.to_list())  # [1,2,3]
+
+    #PRUEBA EJERCICIO 5
+    print("\n[PRUEBA EJERCICIO 5]")
+    l.clear()
+    print(l.a_lista_python())  # []
+
     # PRUEBA EJERCICIO 6: Invertir
     print("\n[PRUEBA EJERCICIO 6]")
     l_basica.invertir()
     print(f"1. Lista invertida: {l_basica.a_lista_python()} (Esperado: [30, 10, 20, 10])")
+ 
+
+    # PRUEBA EJERCICIO 7:
+    print("\n[PRUEBA EJERCICIO 7]")
+    lc = ListaEnlazada()
+    for x in [1,2,3]: lc.agregar(x)
+    print(lc.tiene_ciclo())  # False
+    lc.cabeza.siguiente.siguiente.siguiente = lc.cabeza
+    print(lc.tiene_ciclo())  # True
+
+    # PRUEBA EJERCICIO 8
+    print("\n[PRUEBA EJERCICIO 8]")
+    l = ListaEnlazada()
+    for x in [1,2,3,4,5]: l.agregar(x)
+    print(l.obtener_medio())  # 3
+
 
     # PRUEBA EJERCICIO 9: Duplicados
     print("\n[PRUEBA EJERCICIO 9]")
     l_basica.eliminar_duplicados()
     print(f"1. Sin duplicados: {l_basica.a_lista_python()} (Esperado: [30, 10, 20])")
+
+    # PRUEBA EJERCICIO 11:
+    print("\n[PRUEBA EJERCICIO 11]")
+    l = ListaEnlazada()
+    for x in [1,2,1]: l.agregar(x)
+    print(l.es_palindromo())  # True
 
     # PRUEBA EJERCICIO 12: Rotar
     print("\n[PRUEBA EJERCICIO 12]")
@@ -246,6 +373,28 @@ def ejecutar_pruebas():
     nav.visitar("youtube.com")
     print(f"1. Atrás 1 paso: {nav.atras(1)} (Esperado: google.com)")
     print(f"2. Atrás 10 pasos (límite): {nav.atras(10)} (Esperado: uleam.edu.ec)")
+
+    # PRUEBA EJERCICIO 17: Cache LRU
+    print("\n[PRUEBA EJERCICIO 17]")
+    cache = CacheLRU(2)
+    cache.poner(1, "A")
+    cache.poner(2, "B")
+    print(f"1. Obtener clave 1: {cache.obtener(1)} (Esperado: A)")
+    cache.poner(3, "C")  # Elimina clave 2 (LRU)
+    print(f"2. Obtener clave 2: {cache.obtener(2)} (Esperado: -1)")
+    print(f"3. Obtener clave 3: {cache.obtener(3)} (Esperado: C)")
+
+    #PRUEBA EJERCICIO 18: Editor Multi-cursor
+    print("\n[PRUEBA EJERCICIO 18]")
+    editor = EditorMultiCursor()
+    editor.agregar_cursor("c1", 0)
+    editor.agregar_cursor("c2", 5)
+    editor.escribir_en_cursor("c1", "Buenas")
+    editor.escribir_en_cursor("c2", "Tardes")
+
+    # PRUEBA EJERCICIO 19: Benchmark
+    print("\n[PRUEBA EJERCICIO 19]")
+    realizar_benchmark()
 
 if __name__ == "__main__":
 
